@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maine Civic Tracker · Community Accountability Platform</title>
+  <meta name="description" content="A civic accountability platform making community budget flows, fund allocations, project outcomes, and resident-submitted evidence publicly visible. Proof of concept — built with real data." />
+  <!-- Open Graph for Facebook sharing -->
+  <meta property="og:title" content="Maine Civic Tracker · Community Accountability Platform" />
+  <meta property="og:description" content="Where does your town’s money actually go? Maine Civic Tracker makes budgets, allocations, outcomes, and resident evidence publicly visible — for as little as $1/month to operate." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://andredavisme.github.io/maine-civic-tracker/overview.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #1e293b; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    /* HERO */
+    .hero {
+      background: #1a1a2e;
+      color: white;
+      text-align: center;
+      padding: 60px 24px 50px;
+    }
+    .hero-emoji { font-size: 3rem; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; margin-bottom: 10px; }
+    .hero .sub { font-size: 1.15rem; color: #cbd5e1; margin-bottom: 8px; font-weight: 500; }
+    .hero .tag { font-size: 0.9rem; color: #64748b; font-style: italic; }
+
+    /* SECTIONS */
+    .section { max-width: 800px; margin: 0 auto; padding: 48px 24px 0; }
+    .section-last { padding-bottom: 60px; }
+    h2 {
+      font-size: 1.5rem; font-weight: 800; color: #1a1a2e;
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2::after {
+      content: ''; flex: 1; height: 3px;
+      background: #e63946; border-radius: 2px;
+    }
+
+    /* PROBLEM */
+    .problem-text p { font-size: 1.05rem; margin-bottom: 14px; color: #334155; }
+    .problem-text p strong { color: #1a1a2e; }
+
+    /* FEATURE GRID */
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 20px; }
+    .feature-card {
+      background: white; border-radius: 12px;
+      padding: 20px 18px; border-top: 3px solid #e63946;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .feature-card .icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: #1a1a2e; }
+    .feature-card p { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
+
+    /* NOT A DEMO */
+    .checklist { background: #f0fdf4; border-radius: 12px; padding: 20px 24px; margin-top: 18px; }
+    .checklist li { list-style: none; padding: 7px 0; font-size: 1rem; border-bottom: 1px solid #bbf7d0; color: #166534; font-weight: 500; }
+    .checklist li:last-child { border-bottom: none; }
+
+    /* COST */
+    .cost-compare {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 0; margin-top: 20px; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .cost-box {
+      background: #1a1a2e; color: white;
+      padding: 28px 20px; text-align: center;
+    }
+    .cost-box .label { font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .cost-box .amount { font-size: 1.8rem; font-weight: 900; line-height: 1.2; }
+    .cost-box .amount.trad { color: #e63946; }
+    .cost-box .amount.actual { color: #22c55e; }
+    .cost-box .note { font-size: 0.78rem; color: #64748b; margin-top: 8px; line-height: 1.5; }
+    .cost-vs { background: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; color: #94a3b8; padding: 0 12px; }
+    .cost-footnote { text-align: center; font-size: 0.85rem; color: #64748b; margin-top: 10px; font-style: italic; }
+
+    /* MODELS */
+    .model-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+    .model-card {
+      background: white; border-radius: 12px;
+      padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start;
+      border-left: 4px solid #e63946;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .model-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .model-card h3 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+    .model-card p { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+    .model-card .cost-tag {
+      display: inline-block; background: #f1f5f9; color: #475569;
+      border-radius: 20px; padding: 2px 12px; font-size: 0.78rem;
+      font-weight: 700; margin-top: 6px;
+    }
+    .integrity-note {
+      background: #fff7ed; border-radius: 10px;
+      padding: 14px 18px; margin-top: 16px;
+      font-size: 0.95rem; color: #92400e; line-height: 1.6;
+      border-left: 4px solid #f59e0b;
+    }
+
+    /* GET STARTED */
+    .needs-list { margin-top: 16px; }
+    .needs-list li {
+      list-style: none; padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 1rem; color: #334155;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .needs-list li:last-child { border-bottom: none; }
+    .needs-list li::before { content: '▶'; color: #e63946; flex-shrink: 0; margin-top: 2px; }
+    .no-need {
+      background: #eff6ff; border-radius: 10px; padding: 14px 18px; margin-top: 16px;
+      font-size: 1rem; color: #1e40af; font-weight: 600; line-height: 1.7;
+    }
+
+    /* CTA */
+    .cta {
+      background: #1a1a2e;
+      margin-top: 56px; padding: 56px 24px;
+      text-align: center; color: white;
+    }
+    .cta h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900;
+      margin-bottom: 14px; justify-content: center;
+      color: white;
+    }
+    .cta h2::after { display: none; }
+    .cta .tagline {
+      font-size: 1.1rem; color: #e63946; font-weight: 700;
+      margin-bottom: 16px; letter-spacing: 0.02em;
+    }
+    .cta p {
+      font-size: 1rem; color: #94a3b8; max-width: 580px;
+      margin: 0 auto 28px; line-height: 1.7;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #e63946; color: white;
+      font-size: 1.1rem; font-weight: 800;
+      padding: 16px 40px; border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(230,57,70,0.4);
+    }
+    .cta-btn:hover { background: #c0303c; transform: translateY(-2px); }
+    .cta-sub { margin-top: 16px; font-size: 0.85rem; color: #475569; }
+
+    /* FOOTER */
+    .footer {
+      background: #0f0f1a; text-align: center;
+      padding: 20px 24px; font-size: 0.8rem; color: #475569;
+    }
+    .footer a { color: #64748b; text-decoration: underline; }
+
+    @media (max-width: 520px) {
+      .cost-compare { grid-template-columns: 1fr; }
+      .cost-vs { padding: 12px; }
+      .cost-box .amount { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-emoji">🗺️</div>
+  <h1>Maine Civic Tracker</h1>
+  <p class="sub">A Civic Accountability Platform for Maine Communities</p>
+  <p class="tag">Proof of Concept &nbsp;·&nbsp; Built with Real Data &nbsp;·&nbsp; Operational Today</p>
+</div>
+
+<!-- PROBLEM -->
+<div class="section">
+  <h2>The Problem</h2>
+  <div class="problem-text">
+    <p>Your town collects taxes. It receives state and federal grants. It spends that money on projects. But when was the last time you could easily see <strong>where every dollar came from, where it went, and whether it actually worked?</strong></p>
+    <p>Most Mainers can’t answer that — not because the information doesn’t exist, but because it’s buried in PDF budgets, town meeting minutes, and spreadsheets nobody has time to read.</p>
+    <p>Accountability gaps don’t just waste money. They erode trust, allow mismanagement to go unnoticed, and leave residents feeling powerless.</p>
+  </div>
+</div>
+
+<!-- WHAT IT DOES -->
+<div class="section">
+  <h2>What Maine Civic Tracker Does</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">💰</div>
+      <h3>Budget Transparency</h3>
+      <p>See every revenue source — taxes, grants, state aid, bonds — by fiscal year.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🏗️</div>
+      <h3>Fund Allocations</h3>
+      <p>Track which projects got funded, how much was spent, and who is responsible.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <h3>Outcome Reporting</h3>
+      <p>Verify that projects produced real results with measurable, cited evidence.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📷</div>
+      <h3>Community Evidence</h3>
+      <p>Residents submit photos and reports. A moderator reviews them before they go public.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NOT A DEMO -->
+<div class="section">
+  <h2>This Is Not a Demo</h2>
+  <ul class="checklist">
+    <li>✅&nbsp; Live database with real community records</li>
+    <li>✅&nbsp; Working photo upload and moderation pipeline</li>
+    <li>✅&nbsp; Resident submission form — operational right now</li>
+    <li>✅&nbsp; Admin review queue with approve/reject workflow</li>
+    <li>✅&nbsp; Any Maine community can be onboarded immediately</li>
+  </ul>
+</div>
+
+<!-- COST -->
+<div class="section">
+  <h2>What This Would Have Cost</h2>
+  <div class="cost-compare">
+    <div class="cost-box">
+      <div class="label">Traditional Development</div>
+      <div class="amount trad">$76K – $149K</div>
+      <div class="note">Design · Development · QA<br/>Deployment · Documentation</div>
+    </div>
+    <div class="cost-vs">vs.</div>
+    <div class="cost-box">
+      <div class="label">Actual Cost</div>
+      <div class="amount actual">&lt; $20</div>
+      <div class="note">Donated time +<br/>Perplexity AI subscription</div>
+    </div>
+  </div>
+  <p class="cost-footnote">Ongoing operating cost: as low as $1/month on the volunteer model.</p>
+</div>
+
+<!-- MODELS -->
+<div class="section">
+  <h2>Who Can Run This — and How</h2>
+  <div class="model-cards">
+    <div class="model-card">
+      <div class="model-icon">🏘️</div>
+      <div>
+        <h3>Volunteer Civic Org</h3>
+        <p>A small group of neighbors. One person enters data from public records. One reviews submissions. One keeps the tech running.</p>
+        <span class="cost-tag">~$1/month</span>
+      </div>
+    </div>
+    <div class="model-card">
+      <div class="model-icon">🏗️</div>
+      <div>
+        <h3>Municipal Partnership</h3>
+        <p>Town staff provide budget data annually. An independent resident moderates community submissions — keeping it honest.</p>
+        <span class="cost-tag">~$26–$56/month</span>
+      </div>
+    </div>
+    <div class="model-card">
+      <div class="model-icon">🗺️</div>
+      <div>
+        <h3>Regional Network</h3>
+        <p>One coordinator, multiple communities, a rotating pool of moderators. Covers a full county or region.</p>
+        <span class="cost-tag">~$135–$265/month</span>
+      </div>
+    </div>
+  </div>
+  <div class="integrity-note">
+    <strong>Where humans are always required:</strong> Moderation decisions, data sourcing from public records, and dispute resolution. Automation handles routing, storage, display, and notifications — but <em>judgment stays with people.</em>
+  </div>
+</div>
+
+<!-- GET STARTED -->
+<div class="section section-last">
+  <h2>What Your Community Needs to Get Started</h2>
+  <ul class="needs-list">
+    <li>One person willing to enter budget data from public records (town reports, FOAA requests)</li>
+    <li>One person willing to review resident submissions fairly and consistently</li>
+    <li>One person to handle the technical side — no servers, no coding required to maintain</li>
+    <li>A commitment to sourcing every record from verifiable public documents</li>
+  </ul>
+  <div class="no-need">
+    You do <strong>not</strong> need municipal approval to start.<br/>
+    You do <strong>not</strong> need a large budget.<br/>
+    You do <strong>not</strong> need technical expertise beyond basic computer literacy.
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Ready to bring this to your community?</h2>
+  <p class="tagline">Local Intelligence. Global Scale. Human Driven.</p>
+  <p>
+    207 Analytix is a Portland, Maine–based civic technology initiative.
+    We built this platform to prove it could be done — and to help Maine communities use it.
+    Reach out to discuss deploying this for your town, district, or organization.
+  </p>
+  <a class="cta-btn" href="https://andredavisme.github.io/207analytix/" target="_blank">
+    Visit 207 Analytix →
+  </a>
+  <p class="cta-sub">andredavisme.github.io/207analytix/</p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Maine Civic Tracker &nbsp;·&nbsp;
+  <a href="https://andredavisme.github.io/maine-civic-tracker/" target="_blank">Live Platform</a> &nbsp;·&nbsp;
+  <a href="https://github.com/andredavisme/maine-civic-tracker" target="_blank">GitHub</a> &nbsp;·&nbsp;
+  Built with Supabase, GitHub Pages &amp; Perplexity AI
+</div>
+
+</body>
+</html>
