@@ -21,13 +21,26 @@ function emptyState(icon, title, msg) {
   return `<div class="empty-state"><div class="es-icon">${icon}</div><h3>${title}</h3><p>${msg}</p></div>`;
 }
 
-// ── HOME ──────────────────────────────────────────────────
+// ── inline error helpers ──────────────────────────────────────
+function fieldError(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.borderColor = '#e63946';
+  let err = el.parentElement.querySelector('.field-err');
+  if (!err) { err = document.createElement('p'); err.className = 'field-err'; err.style.cssText = 'color:#e63946;font-size:.8rem;margin:4px 0 0'; el.parentElement.appendChild(err); }
+  err.textContent = msg;
+}
+function clearErrors() {
+  document.querySelectorAll('.field-err').forEach(e => e.remove());
+  document.querySelectorAll('[style*="border-color"]').forEach(e => e.style.borderColor = '');
+}
+
+// ── HOME ──────────────────────────────────────────────────────
 async function initHome() {
   const [communities, allocations, outcomes, evidence] = await Promise.all([
     db.from('civic_communities').select('id', { count: 'exact', head: true }),
     db.from('civic_allocations').select('id', { count: 'exact', head: true }),
     db.from('civic_outcomes').select('id', { count: 'exact', head: true }),
-    // Only count approved submissions for the public stat
     db.from('civic_evidence').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
   ]);
   document.getElementById('statCommunities').textContent = communities.count ?? 0;
@@ -37,7 +50,7 @@ async function initHome() {
   await renderCommunityGrid('communityGrid');
 }
 
-// ── COMMUNITY GRID ─────────────────────────────────────────
+// ── COMMUNITY GRID ────────────────────────────────────────────
 async function renderCommunityGrid(containerId) {
   const grid = document.getElementById(containerId);
   if (!grid) return;
@@ -53,7 +66,7 @@ async function renderCommunityGrid(containerId) {
   `).join('');
 }
 
-// ── BUDGET PAGE ──────────────────────────────────────────────
+// ── BUDGET PAGE ───────────────────────────────────────────────
 async function initBudget() {
   const communities = await getCommunities();
   const sel = document.getElementById('filterCommunity');
@@ -103,7 +116,7 @@ async function initBudget() {
   await loadBudget();
 }
 
-// ── ALLOCATIONS PAGE ─────────────────────────────────────────
+// ── ALLOCATIONS PAGE ──────────────────────────────────────────
 async function initAllocations() {
   const communities = await getCommunities();
   const sel = document.getElementById('filterCommunity');
@@ -142,7 +155,7 @@ async function initAllocations() {
   await load();
 }
 
-// ── OUTCOMES PAGE ────────────────────────────────────────────
+// ── OUTCOMES PAGE ─────────────────────────────────────────────
 async function initOutcomes() {
   const load = async () => {
     let q = db.from('civic_outcomes').select('*, civic_allocations(project_label, civic_communities(name))').order('reported_at', { ascending: false });
@@ -174,7 +187,7 @@ async function initOutcomes() {
   await load();
 }
 
-// ── EVIDENCE WALL ────────────────────────────────────────────
+// ── EVIDENCE WALL ─────────────────────────────────────────────
 async function initEvidence() {
   const load = async () => {
     let q = db.from('civic_evidence').select('*, civic_communities(name)').eq('status','approved').order('created_at', { ascending: false });
@@ -201,7 +214,7 @@ async function initEvidence() {
   await load();
 }
 
-// ── SUBMIT FORM ──────────────────────────────────────────────
+// ── SUBMIT FORM ───────────────────────────────────────────────
 async function initSubmit() {
   const communities = await getCommunities();
   const sel = document.getElementById('communityId');
@@ -219,14 +232,14 @@ async function initSubmit() {
 
   function showPreview(file) {
     if (!file || !file.type.startsWith('image/')) return;
-    if (file.size > 5 * 1024 * 1024) { alert('Photo must be under 5 MB.'); return; }
+    if (file.size > 5 * 1024 * 1024) { fieldError('photoFile', 'Photo must be under 5 MB.'); return; }
     selectedFile = file;
     const reader = new FileReader();
     reader.onload = e => { photoThumb.src = e.target.result; photoPreview.style.display = 'inline-block'; photoDrop.style.display = 'none'; };
     reader.readAsDataURL(file);
   }
 
-  browseTrigger?.addEventListener('click', () => photoFile.click());
+  browseTrigger?.addEventListener('click', (e) => { e.stopPropagation(); photoFile.click(); });
   photoDrop?.addEventListener('click', () => photoFile.click());
   photoFile?.addEventListener('change', e => showPreview(e.target.files[0]));
   removePhoto?.addEventListener('click', () => {
@@ -244,21 +257,31 @@ async function initSubmit() {
   // ── Form submit ──
   document.getElementById('evidenceForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearErrors();
+
+    // Validate required fields BEFORE any upload
+    const evidenceType = document.getElementById('evidenceType').value;
+    const title = document.getElementById('evidenceTitle').value.trim();
+    let hasError = false;
+
+    if (!evidenceType) { fieldError('evidenceType', 'Please select an evidence type.'); hasError = true; }
+    if (!title) { fieldError('evidenceTitle', 'Please enter a title.'); hasError = true; }
+    if (hasError) return;
+
     const btn = document.getElementById('submitBtn');
     btn.textContent = 'Submitting…'; btn.disabled = true;
 
     let photo_url = null;
 
-    // Upload photo if selected
     if (selectedFile) {
       uploadProgress.textContent = 'Uploading photo…';
       const ext = selectedFile.name.split('.').pop();
       const path = `public/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error: upErr } = await db.storage.from(PHOTO_BUCKET).upload(path, selectedFile, { contentType: selectedFile.type });
       if (upErr) {
-        alert('Photo upload failed: ' + upErr.message);
-        btn.textContent = 'Submit Report'; btn.disabled = false;
         uploadProgress.textContent = '';
+        fieldError('photoFile', 'Photo upload failed: ' + upErr.message);
+        btn.textContent = 'Submit Report'; btn.disabled = false;
         return;
       }
       const { data: urlData } = db.storage.from(PHOTO_BUCKET).getPublicUrl(path);
@@ -268,8 +291,8 @@ async function initSubmit() {
 
     const payload = {
       community_id: document.getElementById('communityId').value || null,
-      evidence_type: document.getElementById('evidenceType').value,
-      title: document.getElementById('evidenceTitle').value,
+      evidence_type: evidenceType,
+      title,
       description: document.getElementById('evidenceDesc').value || null,
       location_label: document.getElementById('locationLabel').value || null,
       url: document.getElementById('evidenceUrl').value || null,
@@ -280,7 +303,7 @@ async function initSubmit() {
 
     const { error } = await db.from('civic_evidence').insert(payload);
     if (error) {
-      alert('Something went wrong: ' + error.message);
+      fieldError('evidenceTitle', 'Submission failed: ' + error.message);
       btn.textContent = 'Submit Report'; btn.disabled = false;
     } else {
       document.getElementById('evidenceForm').classList.add('hidden');
@@ -289,7 +312,7 @@ async function initSubmit() {
   });
 }
 
-// ── ROUTER ───────────────────────────────────────────────────
+// ── ROUTER ────────────────────────────────────────────────────
 const p = page();
 if (p === 'index.html' || p === '') initHome();
 else if (p === 'community.html') renderCommunityGrid('communityGrid');
