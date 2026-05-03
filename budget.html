@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budget Sources · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
+      <div class="nav-links">
+        <a href="community.html">Communities</a>
+        <a href="budget.html" class="active">Budget</a>
+        <a href="allocations.html">Allocations</a>
+        <a href="outcomes.html">Outcomes</a>
+        <a href="evidence.html">Evidence Wall</a>
+        <a href="submit.html" class="btn-nav">Report an Issue</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Budget Sources</h1>
+      <p>Every dollar collected from residents and businesses — taxes, fees, and grants — tracked by fiscal year and source type.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <select id="filterCommunity" class="filter-select">
+          <option value="">All Communities</option>
+        </select>
+        <select id="filterYear" class="filter-select">
+          <option value="">All Years</option>
+        </select>
+        <select id="filterType" class="filter-select">
+          <option value="">All Source Types</option>
+          <option value="property_tax">Property Tax</option>
+          <option value="income_tax">Income Tax</option>
+          <option value="sales_tax">Sales Tax</option>
+          <option value="excise_tax">Excise Tax</option>
+          <option value="registration_fee">Registration Fee</option>
+          <option value="inspection_fee">Inspection Fee</option>
+          <option value="meals_tax">Meals Tax</option>
+          <option value="state_grant">State Grant</option>
+          <option value="federal_grant">Federal Grant</option>
+          <option value="other_fee">Other Fee</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="summary-bar" id="budgetSummary"></div>
+      <div class="table-wrap">
+        <table class="data-table" id="budgetTable">
+          <thead>
+            <tr>
+              <th>Community</th>
+              <th>Fiscal Year</th>
+              <th>Source Type</th>
+              <th>Label</th>
+              <th>Collected</th>
+              <th>Allocated</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="budgetBody">
+            <tr><td colspan="7" class="loading">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

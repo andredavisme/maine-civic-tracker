@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evidence Wall · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
+      <div class="nav-links">
+        <a href="community.html">Communities</a>
+        <a href="budget.html">Budget</a>
+        <a href="allocations.html">Allocations</a>
+        <a href="outcomes.html">Outcomes</a>
+        <a href="evidence.html" class="active">Evidence Wall</a>
+        <a href="submit.html" class="btn-nav">Report an Issue</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Evidence Wall</h1>
+      <p>Community-submitted photos, reports, and public records documenting real conditions on the ground. Approved submissions only.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <select id="filterType" class="filter-select">
+          <option value="">All Types</option>
+          <option value="photo">📷 Photo</option>
+          <option value="report">📄 Report</option>
+          <option value="news_link">📰 News Link</option>
+          <option value="public_record">📂 Public Record</option>
+          <option value="field_observation">🔍 Field Observation</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="evidence-grid" id="evidenceGrid">
+        <div class="loading">Loading evidence…</div>
+      </div>
+      <div class="cta-block">
+        <p>Have evidence of an unresolved issue or a successful outcome?</p>
+        <a href="submit.html" class="btn-primary">Submit Your Report</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

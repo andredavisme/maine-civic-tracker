@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Communities · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
+      <div class="nav-links">
+        <a href="community.html" class="active">Communities</a>
+        <a href="budget.html">Budget</a>
+        <a href="allocations.html">Allocations</a>
+        <a href="outcomes.html">Outcomes</a>
+        <a href="evidence.html">Evidence Wall</a>
+        <a href="submit.html" class="btn-nav">Report an Issue</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Communities</h1>
+      <p>Select a community to explore its budget sources, allocations, and accountability roles.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="community-grid" id="communityGrid">
+        <div class="loading">Loading communities…</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

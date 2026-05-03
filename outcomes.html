@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outcomes · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
+      <div class="nav-links">
+        <a href="community.html">Communities</a>
+        <a href="budget.html">Budget</a>
+        <a href="allocations.html">Allocations</a>
+        <a href="outcomes.html" class="active">Outcomes</a>
+        <a href="evidence.html">Evidence Wall</a>
+        <a href="submit.html" class="btn-nav">Report an Issue</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Outcomes</h1>
+      <p>What were the measurable results? Each allocation should produce verifiable outcomes — tracked here.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <select id="filterStatus" class="filter-select">
+          <option value="">All Statuses</option>
+          <option value="achieved">Achieved</option>
+          <option value="partial">Partial</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+          <option value="unverified">Unverified</option>
+        </select>
+      </div>
+      <div class="outcomes-list" id="outcomesList">
+        <div class="loading">Loading outcomes…</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

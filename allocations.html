@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Allocations · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
+      <div class="nav-links">
+        <a href="community.html">Communities</a>
+        <a href="budget.html">Budget</a>
+        <a href="allocations.html" class="active">Allocations</a>
+        <a href="outcomes.html">Outcomes</a>
+        <a href="evidence.html">Evidence Wall</a>
+        <a href="submit.html" class="btn-nav">Report an Issue</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Fund Allocations</h1>
+      <p>Where is the money assigned? Track projects by category, status, and the role responsible for each dollar.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <select id="filterCommunity" class="filter-select">
+          <option value="">All Communities</option>
+        </select>
+        <select id="filterCategory" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="infrastructure">Infrastructure</option>
+          <option value="roads">Roads</option>
+          <option value="housing">Housing</option>
+          <option value="public_safety">Public Safety</option>
+          <option value="education">Education</option>
+          <option value="health">Health</option>
+          <option value="environment">Environment</option>
+          <option value="administration">Administration</option>
+          <option value="social_services">Social Services</option>
+          <option value="other">Other</option>
+        </select>
+        <select id="filterStatus" class="filter-select">
+          <option value="">All Statuses</option>
+          <option value="allocated">Allocated</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="stalled">Stalled</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="cards-grid" id="allocationsGrid">
+        <div class="loading">Loading allocations…</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
