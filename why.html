@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why This Exists | Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .why-hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+    .why-hero h1 { font-size: 2.4rem; margin-bottom: 16px; }
+    .why-hero p { font-size: 1.15rem; opacity: 0.85; max-width: 680px; margin: 0 auto; }
+    .why-section { max-width: 760px; margin: 0 auto; padding: 48px 24px; }
+    .why-section h2 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 16px; border-left: 4px solid #e63946; padding-left: 14px; }
+    .why-section p { line-height: 1.8; color: #444; margin-bottom: 18px; }
+    .convo-block {
+      background: #f4f6f9;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 32px 0;
+      border-left: 4px solid #457b9d;
+    }
+    .convo-block .speaker {
+      font-weight: 700;
+      color: #1d3557;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .convo-block p {
+      margin: 0;
+      color: #333;
+      font-style: italic;
+      line-height: 1.75;
+    }
+    .convo-block.response {
+      border-left-color: #e63946;
+      background: #fff5f5;
+    }
+    .convo-block.response .speaker { color: #9b1b30; }
+    .pivot-block {
+      background: #1a1a2e;
+      color: white;
+      border-radius: 14px;
+      padding: 36px;
+      margin: 40px 0;
+      text-align: center;
+    }
+    .pivot-block h3 { font-size: 1.5rem; margin-bottom: 14px; }
+    .pivot-block p { opacity: 0.85; line-height: 1.75; max-width: 580px; margin: 0 auto 20px; }
+    .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+    .btn-primary {
+      background: #e63946;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.5);
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .pipeline-step {
+      background: white;
+      border: 2px solid #e8edf3;
+      border-radius: 10px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .pipeline-step .step-num {
+      background: #e63946;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin: 0 auto 10px;
+      font-size: 0.9rem;
+    }
+    .pipeline-step h4 { font-size: 0.9rem; color: #1a1a2e; margin-bottom: 6px; }
+    .pipeline-step p { font-size: 0.8rem; color: #666; margin: 0; }
+    .analytix-banner {
+      background: linear-gradient(135deg, #0f3460, #16213e);
+      color: white;
+      border-radius: 14px;
+      padding: 36px;
+      margin: 40px 0;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .analytix-banner .ab-text { flex: 1; min-width: 240px; }
+    .analytix-banner h3 { font-size: 1.4rem; margin-bottom: 10px; }
+    .analytix-banner p { opacity: 0.85; line-height: 1.7; margin: 0 0 16px; }
+    .stale-callout {
+      background: #fff8e1;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 32px 0;
+    }
+    .stale-callout h3 { color: #b8860b; margin-bottom: 10px; font-size: 1.2rem; }
+    .stale-callout p { color: #555; line-height: 1.75; margin: 0; }
+    nav.site-nav { background: #1a1a2e; padding: 14px 24px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    nav.site-nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; }
+    nav.site-nav a:hover { color: white; }
+    nav.site-nav .nav-brand { color: white; font-weight: 700; font-size: 1rem; margin-right: auto; }
+    footer { background: #1a1a2e; color: rgba(255,255,255,0.6); text-align: center; padding: 28px; font-size: 0.85rem; margin-top: 60px; }
+    footer a { color: #e63946; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand">Maine Civic Tracker</a>
+  <a href="community.html">Communities</a>
+  <a href="budget.html">Budget</a>
+  <a href="allocations.html">Allocations</a>
+  <a href="outcomes.html">Outcomes</a>
+  <a href="evidence.html">Evidence</a>
+  <a href="why.html" style="color:white;font-weight:600;">Why This Exists</a>
+  <a href="submit.html">Submit Evidence</a>
+</nav>
+
+<div class="why-hero">
+  <h1>The Conversation Isn't Enough</h1>
+  <p>Every day, Mainers have the right conversation in the wrong place — comment sections, Facebook threads, dinner tables. The argument is sound. The energy is real. The data stays missing. This is what happens next.</p>
+</div>
+
+<div class="why-section">
+
+  <h2>Where It Started</h2>
+  <p>In early 2025, a Facebook post by a Maine resident named Nathaniel Fields laid out what thousands of people feel but can't quite prove. He asked the question directly: <em>Maine collects billions from its residents every year. Why aren't we seeing the results?</em></p>
+  <p>The post went deep — vehicle excise taxes, registration cycles, property taxes, infrastructure gaps. The math wasn't perfect, but the frustration was legitimate. The comment section lit up. And then something interesting happened.</p>
+
+  <div class="convo-block">
+    <div class="speaker">Nathaniel Fields — Original Post</div>
+    <p>"Maine has about 1.4 million people. Roughly 600,000 households. Most households have 1 to 2 vehicles… Every single year people are paying excise tax, registration, inspection. That's easily $300 to $700 per vehicle. That's roughly $240 million to $700 million every year just to keep vehicles legal… Mainers are putting over $10 billion a year into this system. And here's where it stops making sense. We're told infrastructure needs billions. If we're already paying billions every year… why are we still behind? That's not just a funding issue. That's a system issue."</p>
+  </div>
+
+  <h2>The Challenge</h2>
+  <p>The response that cut through wasn't agreement or opposition — it was a demand for precision. The argument is real, but without verified numbers, it's easy to dismiss. Here's the exchange that led directly to this tool being built:</p>
+
+  <div class="convo-block response">
+    <div class="speaker">Andre Davis — Reply</div>
+    <p>"You're over inflating the numbers with assumption, which is fine, but it makes a difference. The argument against anything that requires more money is that there isn't enough money, and when you use hyperbole or unvalidated data, it's easy to say no because you're working with made up numbers. Your point still stands… The argument is shit without the paper trail. It's easy enough to gather. Do that first."</p>
+  </div>
+
+  <div class="convo-block">
+    <div class="speaker">Nathaniel Fields — Response</div>
+    <p>"Could it be tightened up with exact figures? Yes. And I'm open to that. But here's where I'm not backing down. Even if I cut those estimates down, the core point doesn't change. People are paying a lot into the system and not seeing results that match it… So instead of trying to discredit the point, help strengthen it."</p>
+  </div>
+
+  <div class="convo-block response">
+    <div class="speaker">Andre Davis — Final Push</div>
+    <p>"Break down this pipeline: Resident exists in a community — Community is maintained by resources — Resources are acquired with money received from the community residents and businesses that generate income. Do you agree that this is a simple starting point from which to build an ecosystem that meets the need of the resident fairly?"</p>
+  </div>
+
+  <div class="convo-block">
+    <div class="speaker">Nathaniel Fields — Closing</div>
+    <p>"The information is out there if you dig for it. The issue is not access. It is clarity and accountability. Most people cannot easily connect spending to real outcomes. That is the gap I am focused on fixing."</p>
+  </div>
+
+  <h2>The Real Gap</h2>
+  <p>Both sides of that conversation agreed on one thing: <strong>the data is public, but the connection between spending and outcomes doesn't exist in a form that ordinary residents can use.</strong> Nathaniel was right that the information is there. Andre was right that without a clean paper trail, the argument dissolves.</p>
+  <p>That's the gap this tool exists to close. Not another thread. Not another post. A system that takes public data, community-submitted evidence, and puts them side by side so the question <em>"where did the money go?"</em> has an answer anyone can point to.</p>
+
+  <div class="stale-callout">
+    <h3>⚠️ When the Conversation Goes Stale, the Problem Doesn't</h3>
+    <p>Facebook threads scroll away in 48 hours. City council agendas get tabled. Petitions collect signatures and sit in inboxes. The frustration that Nathaniel captured in that post — and that thousands of Mainers share — doesn't disappear just because the notification stops. The pothole is still there. The budget line is still funded. The outcome is still unmeasured. <strong>Stale conversations don't fix infrastructure. Documented evidence does.</strong> Every photo you submit, every outcome you track, every budget line you verify stays in the record permanently — not in a feed that resets every morning.</p>
+  </div>
+
+  <h2>The Pipeline That Needs to Work</h2>
+  <p>The conversation arrived at a framework. Here's the one this tracker is built around:</p>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">1</div>
+      <h4>Resident</h4>
+      <p>Exists in a community, pays into it, expects results</p>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">2</div>
+      <h4>Revenue</h4>
+      <p>Taxes, fees, grants flow into public accounts</p>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">3</div>
+      <h4>Allocation</h4>
+      <p>Local + state governments decide where money goes</p>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">4</div>
+      <h4>Execution</h4>
+      <p>Contractors and agencies deliver (or don't)</p>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">5</div>
+      <h4>Outcome</h4>
+      <p>The road is fixed. The shelter is open. The needle is gone.</p>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">6</div>
+      <h4>Accountability</h4>
+      <p>The public can see what happened and compare to what was promised</p>
+    </div>
+  </div>
+
+  <p>Right now, step 6 barely exists. That's what we're building.</p>
+
+  <div class="analytix-banner">
+    <div class="ab-text">
+      <h3>207 Analytix — Local Intelligence. Global Scale. Human Driven.</h3>
+      <p>This tracker is the community-facing layer of a broader data infrastructure. 207 Analytix aggregates, validates, and structures Maine public data — budgets, allocations, infrastructure records — into formats that communities can actually use. The paper trail Nathaniel and Andre agreed needed to exist is being built here.</p>
+      <a href="https://andredavisme.github.io/207analytix/" target="_blank" class="btn-primary" style="display:inline-block;">Visit 207 Analytix →</a>
+    </div>
+  </div>
+
+  <div class="pivot-block">
+    <h3>Stop Posting. Start Documenting.</h3>
+    <p>Every piece of evidence you submit goes into a permanent, public record tied to your community. Budget sources and allocations are tracked. Outcomes are measured. The conversation becomes a case file.</p>
+    <div class="cta-row">
+      <a href="submit.html" class="btn-primary">Submit Evidence Now</a>
+      <a href="community.html" class="btn-secondary">Find Your Community</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Maine Civic Tracker · Built in Portland, Maine · Powered by <a href="https://andredavisme.github.io/207analytix/" target="_blank">207 Analytix</a></p>
+</footer>
+
+</body>
+</html>

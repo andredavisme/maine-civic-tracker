@@ -5,113 +5,161 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maine Civic Tracker</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    nav.site-nav { background: #1a1a2e; padding: 14px 24px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    nav.site-nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; }
+    nav.site-nav a:hover { color: white; }
+    nav.site-nav .nav-brand { color: white; font-weight: 700; font-size: 1rem; margin-right: auto; }
+    .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); color: white; padding: 80px 24px 60px; text-align: center; }
+    .hero h1 { font-size: 2.6rem; margin-bottom: 16px; }
+    .hero p { font-size: 1.15rem; opacity: 0.85; max-width: 640px; margin: 0 auto 32px; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-red { background: #e63946; color: white; padding: 14px 28px; border-radius: 8px; font-weight: 700; text-decoration: none; }
+    .btn-outline { border: 2px solid rgba(255,255,255,0.5); color: white; padding: 13px 28px; border-radius: 8px; font-weight: 600; text-decoration: none; }
+    .stats-bar { background: white; padding: 32px 24px; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; border-bottom: 2px solid #e8edf3; }
+    .stat { text-align: center; }
+    .stat .num { font-size: 2rem; font-weight: 800; color: #e63946; }
+    .stat .label { font-size: 0.85rem; color: #666; margin-top: 4px; }
+    .section { max-width: 1000px; margin: 0 auto; padding: 56px 24px; }
+    .section h2 { font-size: 1.7rem; color: #1a1a2e; margin-bottom: 32px; text-align: center; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .card { background: white; border: 2px solid #e8edf3; border-radius: 12px; padding: 24px; }
+    .card h3 { font-size: 1rem; color: #1a1a2e; margin-bottom: 8px; }
+    .card p { font-size: 0.88rem; color: #666; line-height: 1.6; margin: 0 0 14px; }
+    .card a { color: #e63946; font-weight: 600; font-size: 0.88rem; text-decoration: none; }
+    .why-strip {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: white;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .why-strip h2 { font-size: 1.8rem; margin-bottom: 16px; }
+    .why-strip p { opacity: 0.85; max-width: 640px; margin: 0 auto 20px; line-height: 1.75; font-size: 1.05rem; }
+    .why-strip .quote-pull {
+      background: rgba(255,255,255,0.07);
+      border-left: 4px solid #e63946;
+      border-radius: 8px;
+      padding: 20px 28px;
+      max-width: 620px;
+      margin: 24px auto;
+      font-style: italic;
+      font-size: 1rem;
+      opacity: 0.9;
+      text-align: left;
+    }
+    .why-strip .quote-attr { font-size: 0.8rem; opacity: 0.6; margin-top: 8px; font-style: normal; }
+    .pipeline-row { display: flex; gap: 0; justify-content: center; flex-wrap: wrap; margin: 32px 0; }
+    .p-step { text-align: center; padding: 12px 20px; position: relative; }
+    .p-step .icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .p-step .label { font-size: 0.78rem; color: #888; }
+    .p-arrow { font-size: 1.2rem; color: #ccc; align-self: center; padding: 0 4px; }
+    footer { background: #1a1a2e; color: rgba(255,255,255,0.6); text-align: center; padding: 28px; font-size: 0.85rem; }
+    footer a { color: #e63946; text-decoration: none; }
+  </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-brand">🗺️ Maine Civic Tracker</a>
-      <div class="nav-links">
-        <a href="community.html">Communities</a>
-        <a href="budget.html">Budget</a>
-        <a href="allocations.html">Allocations</a>
-        <a href="outcomes.html">Outcomes</a>
-        <a href="evidence.html">Evidence Wall</a>
-        <a href="submit.html" class="btn-nav">Report an Issue</a>
-      </div>
-    </div>
-  </nav>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">Maine Community Accountability Platform</div>
-      <h1>Where does the money go?</h1>
-      <p class="hero-sub">Mainers pay billions into state and local systems every year. This platform tracks where that money is allocated, who is accountable for it, and whether it's producing real results in your community.</p>
-      <div class="hero-actions">
-        <a href="community.html" class="btn-primary">Explore Communities</a>
-        <a href="submit.html" class="btn-outline">Submit Evidence</a>
-      </div>
-      <div class="hero-stats" id="heroStats">
-        <div class="stat-card"><span class="stat-num" id="statCommunities">—</span><span class="stat-label">Communities</span></div>
-        <div class="stat-card"><span class="stat-num" id="statAllocations">—</span><span class="stat-label">Projects Tracked</span></div>
-        <div class="stat-card"><span class="stat-num" id="statEvidence">—</span><span class="stat-label">Evidence Reports</span></div>
-        <div class="stat-card"><span class="stat-num" id="statOutcomes">—</span><span class="stat-label">Outcomes Recorded</span></div>
-      </div>
-    </div>
-  </header>
+<nav class="site-nav">
+  <span class="nav-brand">Maine Civic Tracker</span>
+  <a href="community.html">Communities</a>
+  <a href="budget.html">Budget</a>
+  <a href="allocations.html">Allocations</a>
+  <a href="outcomes.html">Outcomes</a>
+  <a href="evidence.html">Evidence</a>
+  <a href="why.html">Why This Exists</a>
+  <a href="submit.html">Submit Evidence</a>
+</nav>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">How It Works</h2>
-      <p class="section-sub">A simple pipeline from revenue to results — with accountability at every step.</p>
-      <div class="pipeline">
-        <div class="pipe-step">
-          <div class="pipe-icon">💰</div>
-          <h3>Funds Collected</h3>
-          <p>Property tax, excise tax, registration fees, state grants, and federal funding flowing into communities.</p>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-icon">📋</div>
-          <h3>Funds Allocated</h3>
-          <p>Dollars assigned to roads, housing, safety, education, and public services — with named roles responsible.</p>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-icon">🏗️</div>
-          <h3>Work Executed</h3>
-          <p>Contractors and agencies deliver the projects. Status is tracked: allocated, in progress, completed, or stalled.</p>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-icon">📊</div>
-          <h3>Outcomes Measured</h3>
-          <p>Did it work? Community members submit evidence, metrics are recorded, and results are publicly visible.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="hero">
+  <h1>Where Does Maine's Money Go?</h1>
+  <p>A public tracker that connects what residents pay into the system with what they actually get out of it. Budget sources, allocations, outcomes, and community-submitted evidence — all in one place.</p>
+  <div class="hero-btns">
+    <a href="submit.html" class="btn-red">Submit Evidence</a>
+    <a href="why.html" class="btn-outline">Why This Exists</a>
+    <a href="community.html" class="btn-outline">Find Your Community</a>
+  </div>
+</div>
 
-  <section class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Why This Exists</h2>
-      <div class="why-grid">
-        <div class="why-card">
-          <h3>Accountability isn't complaining</h3>
-          <p>When people pay into a system, they're entitled to know what it produces. Tracking outcomes isn't political — it's basic civil responsibility.</p>
-        </div>
-        <div class="why-card">
-          <h3>Data beats talking points</h3>
-          <p>You can't dismiss documented evidence. Photos, public records, and verified metrics are harder to ignore than a Facebook post.</p>
-        </div>
-        <div class="why-card">
-          <h3>Roles need names</h3>
-          <p>Money doesn't mismanage itself. Every allocation has someone responsible. This platform makes sure that's visible.</p>
-        </div>
-        <div class="why-card">
-          <h3>Fix what's broken</h3>
-          <p>If a project isn't producing results, it shouldn't keep getting funded the same way. Transparency is the first step to that change.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="stats-bar">
+  <div class="stat"><div class="num" id="stat-communities">2</div><div class="label">Communities Tracked</div></div>
+  <div class="stat"><div class="num" id="stat-projects">0</div><div class="label">Active Projects</div></div>
+  <div class="stat"><div class="num" id="stat-evidence">0</div><div class="label">Evidence Submitted</div></div>
+  <div class="stat"><div class="num" id="stat-outcomes">0</div><div class="label">Outcomes Logged</div></div>
+</div>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Communities</h2>
-      <div class="community-grid" id="communityGrid">
-        <div class="loading">Loading communities…</div>
-      </div>
-    </div>
-  </section>
+<!-- WHY THIS EXISTS STRIP -->
+<div class="why-strip">
+  <h2>The Conversation Isn't Enough</h2>
+  <p>In 2025, a Maine resident named Nathaniel Fields posted a question that thousands of people feel but can't prove. Maine collects billions from its residents every year. Where does it go? Why aren't we seeing the results?</p>
+  <div class="quote-pull">
+    "The information is out there if you dig for it. The issue is not access. It is clarity and accountability. Most people cannot easily connect spending to real outcomes. That is the gap I am focused on fixing."
+    <div class="quote-attr">— Nathaniel Fields, Maine resident</div>
+  </div>
+  <p>That gap is exactly what this tracker is built to close. Facebook threads scroll away in 48 hours. The pothole stays. <strong>Stop posting. Start documenting.</strong></p>
+  <div style="margin-top:24px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="why.html" class="btn-red">Read the Full Story →</a>
+    <a href="https://andredavisme.github.io/207analytix/" target="_blank" class="btn-outline">207 Analytix</a>
+  </div>
+</div>
 
-  <footer class="footer">
-    <div class="container">
-      <p>Maine Civic Tracker · Built by <a href="https://207analytix.com" target="_blank">207 Analytix</a> · Data sourced from public budgets and community reports</p>
-    </div>
-  </footer>
+<div class="section">
+  <h2>How the System Should Work</h2>
+  <div class="pipeline-row">
+    <div class="p-step"><div class="icon">🏘️</div><div class="label">Resident</div></div>
+    <div class="p-arrow">→</div>
+    <div class="p-step"><div class="icon">💰</div><div class="label">Revenue</div></div>
+    <div class="p-arrow">→</div>
+    <div class="p-step"><div class="icon">📋</div><div class="label">Allocation</div></div>
+    <div class="p-arrow">→</div>
+    <div class="p-step"><div class="icon">🔨</div><div class="label">Execution</div></div>
+    <div class="p-arrow">→</div>
+    <div class="p-step"><div class="icon">✅</div><div class="label">Outcome</div></div>
+    <div class="p-arrow">→</div>
+    <div class="p-step"><div class="icon">📊</div><div class="label">Accountability</div></div>
+  </div>
+  <p style="text-align:center;color:#666;font-size:0.95rem;">Right now, step 6 barely exists. That's what we're building.</p>
+</div>
 
-  <script type="module" src="app.js"></script>
+<div class="section" style="padding-top:0;">
+  <h2>Explore the Data</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>📍 Communities</h3>
+      <p>Browse all tracked communities in Maine. See budget totals, active projects, and evidence counts for your town.</p>
+      <a href="community.html">Browse Communities →</a>
+    </div>
+    <div class="card">
+      <h3>💵 Budget Sources</h3>
+      <p>Where does the money come from? Excise tax, property tax, grants, fees — broken down by community and year.</p>
+      <a href="budget.html">View Budget Sources →</a>
+    </div>
+    <div class="card">
+      <h3>📋 Allocations</h3>
+      <p>How was the money allocated? Track each fund distribution with responsible roles and spending status.</p>
+      <a href="allocations.html">View Allocations →</a>
+    </div>
+    <div class="card">
+      <h3>✅ Outcomes</h3>
+      <p>Did the work actually happen? Log and verify outcomes — achieved, partial, pending, or failed.</p>
+      <a href="outcomes.html">View Outcomes →</a>
+    </div>
+    <div class="card">
+      <h3>📷 Evidence</h3>
+      <p>Community-submitted photos, public records, and field observations. The paper trail the argument needs.</p>
+      <a href="evidence.html">View Evidence →</a>
+    </div>
+    <div class="card">
+      <h3>📤 Submit</h3>
+      <p>Have a photo of a pothole that's been there for years? A needle on a playground? A budget line with no results? Submit it here.</p>
+      <a href="submit.html">Submit Evidence →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Maine Civic Tracker · Built in Portland, Maine · Powered by <a href="https://andredavisme.github.io/207analytix/" target="_blank">207 Analytix</a> · Data is public. Use it.</p>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
