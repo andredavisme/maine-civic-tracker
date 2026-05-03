@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Review · Maine Civic Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { background: #f4f6f9; }
+    .admin-gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .gate-card { background: white; border-radius: 14px; padding: 48px 40px; max-width: 400px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
+    .gate-card h2 { color: #1a1a2e; margin-bottom: 8px; }
+    .gate-card p { color: #64748b; margin-bottom: 28px; font-size: 0.95rem; }
+    .gate-card input { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; margin-bottom: 14px; box-sizing: border-box; }
+    .gate-card input:focus { outline: none; border-color: #e63946; }
+    .gate-error { color: #e63946; font-size: 0.85rem; margin-bottom: 12px; display: none; }
+    .admin-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+    .admin-header h1 { color: #1a1a2e; font-size: 1.8rem; }
+    .pending-badge { background: #e63946; color: white; border-radius: 20px; padding: 4px 14px; font-size: 0.85rem; font-weight: 700; }
+    .review-card { background: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #ffc107; }
+    .review-card.approved { border-left-color: #22c55e; opacity: 0.65; }
+    .review-card.rejected { border-left-color: #ef4444; opacity: 0.65; }
+    .rc-meta { font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; }
+    .rc-type { display: inline-block; background: #f1f5f9; color: #475569; border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 600; margin-right: 8px; }
+    .rc-title { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+    .rc-desc { color: #555; font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+    .rc-location { font-size: 0.85rem; color: #64748b; margin-bottom: 14px; }
+    .rc-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .btn-approve { background: #22c55e; color: white; border: none; padding: 9px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+    .btn-approve:hover { background: #16a34a; }
+    .btn-reject { background: white; color: #ef4444; border: 2px solid #ef4444; padding: 7px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+    .btn-reject:hover { background: #fef2f2; }
+    .btn-approve:disabled, .btn-reject:disabled { opacity: 0.5; cursor: not-allowed; }
+    .rc-notes input { border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; width: 220px; }
+    .rc-status { font-size: 0.85rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .rc-status.approved { background: #dcfce7; color: #16a34a; }
+    .rc-status.rejected { background: #fee2e2; color: #dc2626; }
+    .empty-admin { text-align: center; padding: 60px 20px; color: #94a3b8; }
+    .empty-admin .icon { font-size: 3rem; margin-bottom: 16px; }
+    .filter-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .filter-row select { padding: 8px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: white; cursor: pointer; }
+    .admin-nav { background: #1a1a2e; padding: 14px 24px; display: flex; gap: 20px; align-items: center; }
+    .signout-btn { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: white; padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; margin-left: auto; }
+    .signout-btn:hover { background: rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body>
+
+<div class="admin-gate" id="gateScreen">
+  <div class="gate-card">
+    <div style="font-size:2.5rem;margin-bottom:16px">🔐</div>
+    <h2>Admin Review</h2>
+    <p>Maine Civic Tracker &middot; Evidence Moderation</p>
+    <input type="password" id="adminPass" placeholder="Enter passphrase" />
+    <div class="gate-error" id="gateError">Incorrect passphrase. Try again.</div>
+    <button class="btn-primary" id="gateBtn" style="width:100%">Enter</button>
+  </div>
+</div>
+
+<div id="adminUI" style="display:none">
+  <nav class="admin-nav">
+    <span style="color:white;font-weight:700">🗺️ Maine Civic Tracker &middot; Admin</span>
+    <a href="evidence.html" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.9rem;">Evidence Wall</a>
+    <a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.9rem;">Public Site</a>
+    <button class="signout-btn" id="signoutBtn">Sign Out</button>
+  </nav>
+
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div>
+        <h1>Evidence Review Queue</h1>
+        <p style="color:#64748b;margin:4px 0 0">Approve or reject community submissions before they go public.</p>
+      </div>
+      <span class="pending-badge" id="pendingCount">0 pending</span>
+    </div>
+    <div class="filter-row">
+      <select id="adminFilter">
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div id="reviewQueue"></div>
+  </div>
+</div>
+
+<script type="module">
+const REVIEW_FN = 'https://hhyhulqngdkwsxhymmcd.supabase.co/functions/v1/review-evidence';
+let adminSecret = '';
+
+async function checkPass() {
+  const val = document.getElementById('adminPass').value.trim();
+  if (!val) return;
+  const btn = document.getElementById('gateBtn');
+  btn.textContent = 'Checking…'; btn.disabled = true;
+  // Probe the function — a non-401 means auth passed (even if the ID is fake)
+  const r = await fetch(REVIEW_FN, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': val },
+    body: JSON.stringify({ id: '00000000-0000-0000-0000-000000000000', action: 'approve' }),
+  });
+  if (r.status === 401) {
+    document.getElementById('gateError').style.display = 'block';
+    btn.textContent = 'Enter'; btn.disabled = false;
+  } else {
+    adminSecret = val;
+    sessionStorage.setItem('adminSecret', val);
+    document.getElementById('gateScreen').style.display = 'none';
+    document.getElementById('adminUI').style.display = 'block';
+    loadQueue();
+  }
+}
+
+async function loadQueue() {
+  const queue = document.getElementById('reviewQueue');
+  const filter = document.getElementById('adminFilter').value;
+  queue.innerHTML = '<p style="color:#94a3b8;padding:20px 0">Loading…</p>';
+  const res = await fetch(`${REVIEW_FN}?filter=${filter}`, {
+    headers: { 'x-admin-secret': adminSecret },
+  });
+  const data = await res.json();
+  const rows = data.rows || [];
+  const pending = rows.filter(r => r.status === 'pending').length;
+  document.getElementById('pendingCount').textContent = filter === 'pending' ? `${rows.length} pending` : `${pending} pending`;
+  if (!rows.length) {
+    queue.innerHTML = '<div class="empty-admin"><div class="icon">✅</div><p>No submissions in this filter.</p></div>';
+    return;
+  }
+  queue.innerHTML = rows.map(r => `
+    <div class="review-card ${r.status !== 'pending' ? r.status : ''}" id="card-${r.id}">
+      <div class="rc-meta">
+        <span class="rc-type">${r.evidence_type.replace('_',' ')}</span>
+        ${r.community_name ? `<strong>${r.community_name}</strong> &middot; ` : ''}
+        ${r.submitted_by ? `by ${r.submitted_by} &middot; ` : 'Anonymous &middot; '}
+        ${new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+      </div>
+      <div class="rc-title">${r.title}</div>
+      ${r.description ? `<div class="rc-desc">${r.description}</div>` : ''}
+      ${r.location_label ? `<div class="rc-location">📍 ${r.location_label}</div>` : ''}
+      ${r.url ? `<div style="margin-bottom:10px"><a href="${r.url}" target="_blank" style="color:#3b82f6;font-size:0.85rem">🔗 View linked source</a></div>` : ''}
+      ${r.status !== 'pending'
+        ? `<span class="rc-status ${r.status}">${r.status === 'approved' ? '✓ Approved' : '✗ Rejected'}</span>${r.reviewer_notes ? ` <span style="font-size:0.8rem;color:#64748b">&mdash; ${r.reviewer_notes}</span>` : ''}`
+        : `<div class="rc-actions">
+            <div class="rc-notes"><input type="text" placeholder="Reviewer note (optional)" id="note-${r.id}" /></div>
+            <button class="btn-approve" onclick="review('${r.id}','approve')"> Approve</button>
+            <button class="btn-reject" onclick="review('${r.id}','reject')"> Reject</button>
+           </div>`
+      }
+    </div>
+  `).join('');
+}
+
+async function review(id, action) {
+  const notes = document.getElementById(`note-${id}`)?.value || null;
+  document.querySelector(`#card-${id} .btn-approve`).disabled = true;
+  document.querySelector(`#card-${id} .btn-reject`).disabled = true;
+  const res = await fetch(REVIEW_FN, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+    body: JSON.stringify({ id, action, notes }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    const card = document.getElementById(`card-${id}`);
+    card.classList.add(action === 'approve' ? 'approved' : 'rejected');
+    card.querySelector('.rc-actions').innerHTML =
+      `<span class="rc-status ${action === 'approve' ? 'approved' : 'rejected'}">${action === 'approve' ? '✓ Approved' : '✗ Rejected'}</span>`;
+    const badge = document.getElementById('pendingCount');
+    const n = parseInt(badge.textContent) || 0;
+    if (n > 0) badge.textContent = `${n - 1} pending`;
+  } else {
+    alert('Error: ' + (data.error || 'Unknown'));
+    document.querySelector(`#card-${id} .btn-approve`).disabled = false;
+    document.querySelector(`#card-${id} .btn-reject`).disabled = false;
+  }
+}
+
+// Wire up
+document.getElementById('gateBtn').addEventListener('click', checkPass);
+document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') checkPass(); });
+document.getElementById('signoutBtn').addEventListener('click', () => { sessionStorage.removeItem('adminSecret'); location.reload(); });
+document.getElementById('adminFilter').addEventListener('change', loadQueue);
+window.review = review;
+
+// Restore session
+const stored = sessionStorage.getItem('adminSecret');
+if (stored) {
+  adminSecret = stored;
+  document.getElementById('gateScreen').style.display = 'none';
+  document.getElementById('adminUI').style.display = 'block';
+  loadQueue();
+}
+</script>
+</body>
+</html>
