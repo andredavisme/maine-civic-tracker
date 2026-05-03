@@ -3,6 +3,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = 'https://hhyhulqngdkwsxhymmcd.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoeWh1bHFuZ2Rrd3N4aHltbWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMzEyMDEsImV4cCI6MjA5MjcwNzIwMX0.dmSy7Q8Je5lEY4XCFzwvfPnkBYLebPE0yZMhy6Y8czI';
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const PHOTO_BUCKET = 'evidence-photos';
 
 const fmt = (n) => n != null ? '$' + Number(n).toLocaleString() : '—';
 const page = () => location.pathname.split('/').pop() || 'index.html';
@@ -20,12 +21,14 @@ function emptyState(icon, title, msg) {
   return `<div class="empty-state"><div class="es-icon">${icon}</div><h3>${title}</h3><p>${msg}</p></div>`;
 }
 
+// ── HOME ──────────────────────────────────────────────────
 async function initHome() {
   const [communities, allocations, outcomes, evidence] = await Promise.all([
     db.from('civic_communities').select('id', { count: 'exact', head: true }),
     db.from('civic_allocations').select('id', { count: 'exact', head: true }),
     db.from('civic_outcomes').select('id', { count: 'exact', head: true }),
-    db.from('civic_evidence').select('id', { count: 'exact', head: true }),
+    // Only count approved submissions for the public stat
+    db.from('civic_evidence').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
   ]);
   document.getElementById('statCommunities').textContent = communities.count ?? 0;
   document.getElementById('statAllocations').textContent = allocations.count ?? 0;
@@ -34,6 +37,7 @@ async function initHome() {
   await renderCommunityGrid('communityGrid');
 }
 
+// ── COMMUNITY GRID ─────────────────────────────────────────
 async function renderCommunityGrid(containerId) {
   const grid = document.getElementById(containerId);
   if (!grid) return;
@@ -49,6 +53,7 @@ async function renderCommunityGrid(containerId) {
   `).join('');
 }
 
+// ── BUDGET PAGE ──────────────────────────────────────────────
 async function initBudget() {
   const communities = await getCommunities();
   const sel = document.getElementById('filterCommunity');
@@ -98,6 +103,7 @@ async function initBudget() {
   await loadBudget();
 }
 
+// ── ALLOCATIONS PAGE ─────────────────────────────────────────
 async function initAllocations() {
   const communities = await getCommunities();
   const sel = document.getElementById('filterCommunity');
@@ -136,6 +142,7 @@ async function initAllocations() {
   await load();
 }
 
+// ── OUTCOMES PAGE ────────────────────────────────────────────
 async function initOutcomes() {
   const load = async () => {
     let q = db.from('civic_outcomes').select('*, civic_allocations(project_label, civic_communities(name))').order('reported_at', { ascending: false });
@@ -167,6 +174,7 @@ async function initOutcomes() {
   await load();
 }
 
+// ── EVIDENCE WALL ────────────────────────────────────────────
 async function initEvidence() {
   const load = async () => {
     let q = db.from('civic_evidence').select('*, civic_communities(name)').eq('status','approved').order('created_at', { ascending: false });
@@ -179,6 +187,7 @@ async function initEvidence() {
     if (!rows.length) { grid.innerHTML = emptyState('📷', 'No evidence yet', 'Be the first to document conditions in your community.'); return; }
     grid.innerHTML = rows.map(r => `
       <div class="evidence-card">
+        ${r.photo_url ? `<img src="${r.photo_url}" alt="Evidence photo" style="width:100%;border-radius:8px;margin-bottom:12px;object-fit:cover;max-height:200px" />` : ''}
         <span class="evidence-type-tag">${r.evidence_type.replace('_',' ')}</span>
         <h3>${r.title}</h3>
         ${r.description ? `<p>${r.description}</p>` : ''}
@@ -192,14 +201,71 @@ async function initEvidence() {
   await load();
 }
 
+// ── SUBMIT FORM ──────────────────────────────────────────────
 async function initSubmit() {
   const communities = await getCommunities();
   const sel = document.getElementById('communityId');
   if (sel) communities.forEach(c => { const o = document.createElement('option'); o.value = c.id; o.textContent = c.name; sel.appendChild(o); });
+
+  // ── Photo upload wiring ──
+  let selectedFile = null;
+  const photoFile = document.getElementById('photoFile');
+  const photoDrop = document.getElementById('photoDrop');
+  const photoPreview = document.getElementById('photoPreview');
+  const photoThumb = document.getElementById('photoThumb');
+  const removePhoto = document.getElementById('removePhoto');
+  const uploadProgress = document.getElementById('uploadProgress');
+  const browseTrigger = document.getElementById('browseTrigger');
+
+  function showPreview(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Photo must be under 5 MB.'); return; }
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = e => { photoThumb.src = e.target.result; photoPreview.style.display = 'inline-block'; photoDrop.style.display = 'none'; };
+    reader.readAsDataURL(file);
+  }
+
+  browseTrigger?.addEventListener('click', () => photoFile.click());
+  photoDrop?.addEventListener('click', () => photoFile.click());
+  photoFile?.addEventListener('change', e => showPreview(e.target.files[0]));
+  removePhoto?.addEventListener('click', () => {
+    selectedFile = null; photoFile.value = '';
+    photoPreview.style.display = 'none'; photoDrop.style.display = '';
+    photoThumb.src = '';
+  });
+  photoDrop?.addEventListener('dragover', e => { e.preventDefault(); photoDrop.classList.add('dragover'); });
+  photoDrop?.addEventListener('dragleave', () => photoDrop.classList.remove('dragover'));
+  photoDrop?.addEventListener('drop', e => {
+    e.preventDefault(); photoDrop.classList.remove('dragover');
+    showPreview(e.dataTransfer.files[0]);
+  });
+
+  // ── Form submit ──
   document.getElementById('evidenceForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.textContent = 'Submitting…'; btn.disabled = true;
+
+    let photo_url = null;
+
+    // Upload photo if selected
+    if (selectedFile) {
+      uploadProgress.textContent = 'Uploading photo…';
+      const ext = selectedFile.name.split('.').pop();
+      const path = `public/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: upErr } = await db.storage.from(PHOTO_BUCKET).upload(path, selectedFile, { contentType: selectedFile.type });
+      if (upErr) {
+        alert('Photo upload failed: ' + upErr.message);
+        btn.textContent = 'Submit Report'; btn.disabled = false;
+        uploadProgress.textContent = '';
+        return;
+      }
+      const { data: urlData } = db.storage.from(PHOTO_BUCKET).getPublicUrl(path);
+      photo_url = urlData.publicUrl;
+      uploadProgress.textContent = '';
+    }
+
     const payload = {
       community_id: document.getElementById('communityId').value || null,
       evidence_type: document.getElementById('evidenceType').value,
@@ -208,8 +274,10 @@ async function initSubmit() {
       location_label: document.getElementById('locationLabel').value || null,
       url: document.getElementById('evidenceUrl').value || null,
       submitted_by: document.getElementById('submittedBy').value || null,
+      photo_url,
       status: 'pending',
     };
+
     const { error } = await db.from('civic_evidence').insert(payload);
     if (error) {
       alert('Something went wrong: ' + error.message);
@@ -221,6 +289,7 @@ async function initSubmit() {
   });
 }
 
+// ── ROUTER ───────────────────────────────────────────────────
 const p = page();
 if (p === 'index.html' || p === '') initHome();
 else if (p === 'community.html') renderCommunityGrid('communityGrid');

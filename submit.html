@@ -6,6 +6,31 @@
   <title>Submit Report · Maine Civic Tracker</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    .photo-drop {
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #f8fafc;
+    }
+    .photo-drop:hover, .photo-drop.dragover { border-color: #e63946; background: #fff5f5; }
+    .photo-drop input[type=file] { display: none; }
+    .photo-drop .drop-icon { font-size: 2rem; margin-bottom: 8px; }
+    .photo-drop p { color: #64748b; font-size: 0.9rem; margin: 0; }
+    .photo-drop .browse { color: #e63946; font-weight: 600; cursor: pointer; text-decoration: underline; }
+    .photo-preview { margin-top: 12px; position: relative; display: inline-block; }
+    .photo-preview img { max-width: 100%; max-height: 220px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .photo-preview .remove-photo {
+      position: absolute; top: -8px; right: -8px;
+      background: #e63946; color: white; border: none;
+      border-radius: 50%; width: 24px; height: 24px;
+      font-size: 0.8rem; cursor: pointer; line-height: 24px; text-align: center;
+    }
+    .upload-progress { margin-top: 8px; font-size: 0.85rem; color: #64748b; }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -71,12 +96,27 @@
 
         <div class="form-group">
           <label>Description</label>
-          <textarea id="evidenceDesc" rows="4" placeholder="Describe what you observed. Be specific — location, condition, how long it's been there."></textarea>
+          <textarea id="evidenceDesc" rows="4" placeholder="Describe what you observed. Be specific — location, condition, how long it’s been there."></textarea>
         </div>
 
         <div class="form-group">
           <label>Location <span class="optional">(optional)</span></label>
           <input type="text" id="locationLabel" placeholder="e.g. Forest Ave & Marginal Way, Portland" />
+        </div>
+
+        <div class="form-group">
+          <label>Photo <span class="optional">(optional)</span></label>
+          <div class="photo-drop" id="photoDrop">
+            <input type="file" id="photoFile" accept="image/*" />
+            <div class="drop-icon">📷</div>
+            <p>Drag &amp; drop a photo here, or <span class="browse" id="browseTrigger">browse to upload</span></p>
+            <p style="font-size:0.78rem;color:#94a3b8;margin-top:6px">JPG, PNG, WEBP · max 5 MB</p>
+          </div>
+          <div class="photo-preview" id="photoPreview" style="display:none">
+            <img id="photoThumb" src="" alt="Preview" />
+            <button type="button" class="remove-photo" id="removePhoto">×</button>
+          </div>
+          <div class="upload-progress" id="uploadProgress"></div>
         </div>
 
         <div class="form-group">
